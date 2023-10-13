@@ -5,9 +5,9 @@
     width="30%"
     :before-close="handleClose"
   >
-    <div style="display: flex; align-items: center">
+    <div style="display: flex; align-items: center; flex-wrap: wrap">
       <span style="margin: 0 5px">UserName: </span>
-      <el-input v-model.trim="username" />
+      <el-input v-model.trim="username" @keyup.enter="createUser" />
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -18,8 +18,8 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
-import { useUserStore } from '../stores/userstore'
+import { ElMessage } from "element-plus";
+import { useUserStore } from "../stores/userstore";
 import { ref } from "vue";
 
 const props = defineProps({
@@ -28,7 +28,7 @@ const props = defineProps({
   },
 });
 
-const user = useUserStore()
+const user = useUserStore();
 
 const emit = defineEmits(["close"]);
 
@@ -51,13 +51,19 @@ const createUser = () => {
     .then((res) => res.json())
     .then((data) => {
       if (data.id) {
-        ElMessage.success('Create user success.')
-        user.saveuser(data)
+        ElMessage.success("Create user success.");
+        user.saveuser(data);
         emit("close");
       }
     })
     .catch(() => {
-        ElMessage.error('Oops, Failed to create user.')
+      ElMessage.error("Oops, Failed to create user.");
     });
 };
 </script>
+<style scoped>
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

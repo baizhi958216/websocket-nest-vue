@@ -6,11 +6,17 @@ interface IUser {
   id: string;
 }
 
-export const useUserStore = defineStore("counter", () => {
-  const user = ref<IUser>();
-  function saveuser(user1: IUser) {
-    user.value = user1;
-  }
+export const useUserStore = defineStore(
+  "counter",
+  () => {
+    const user = ref<IUser>();
+    function saveuser(user1: IUser) {
+      user.value = user1;
+    }
 
-  return { user, saveuser };
-});
+    return { user, saveuser };
+  },
+  {
+    persist: true,
+  }
+);

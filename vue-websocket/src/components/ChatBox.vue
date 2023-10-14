@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 import MessageList from "../components/MessageList.vue";
 import { ElMessage } from "element-plus";
 import { useUserStore } from "../stores/user.store";
@@ -24,10 +24,18 @@ import { client } from "../libs/socket.io";
 
 onMounted(() => {
   client.connect();
+  scroll();
 });
 
 const userStore = useUserStore();
 const messageStore = useMessageStore();
+
+const scroll = () => {
+  const messageBox = document.querySelector(".messages");
+  if (messageBox) {
+    messageBox.scrollTop = messageBox.scrollHeight;
+  }
+};
 
 const editor_input = ref<string>();
 
@@ -37,6 +45,9 @@ client.on("connect", () => {
 
 client.on("message", (message) => {
   messageStore.messageList.push(message);
+  nextTick(() => {
+    scroll();
+  });
 });
 
 const sendMessage = () => {

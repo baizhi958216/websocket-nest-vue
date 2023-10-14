@@ -1,26 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { db } from 'lib/db';
 
 @Injectable()
 export class MessagesService {
-  create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
-  }
-
-  findAll() {
-    return `This action returns all messages`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} message`;
-  }
-
-  update(id: number, updateMessageDto: UpdateMessageDto) {
-    return `This action updates a #${id} message`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} message`;
+  async create(createMessageDto: CreateMessageDto) {
+    const message = await db.message.create({
+      data: createMessageDto,
+    });
+    const username = await db.user.findUnique({
+      where: {
+        id: message.userId,
+      },
+      select: {
+        username: true,
+      },
+    });
+    return username ? Object.assign(message, username) : null;
   }
 }

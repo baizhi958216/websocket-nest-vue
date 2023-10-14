@@ -2,7 +2,6 @@
   <el-dialog
     v-model="props.visable"
     title="Create User: "
-    width="30%"
     :before-close="handleClose"
   >
     <div style="display: flex; align-items: center; flex-wrap: wrap">
@@ -39,7 +38,7 @@ const handleClose = () => {
 };
 
 const createUser = () => {
-  fetch(`http://localhost:3000/user`, {
+  fetch(`http://192.168.0.102:3000/user`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

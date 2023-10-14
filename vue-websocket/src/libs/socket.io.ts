@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const client = io("http://localhost:3001", {
+const client = io("http://192.168.0.102:3001", {
   autoConnect: true,
 });
 

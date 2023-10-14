@@ -10,11 +10,14 @@ export const useUserStore = defineStore(
   "userstore",
   () => {
     const user = ref<IUser>();
-    function saveuser(user1: IUser) {
+    const saveuser = (user1: IUser) => {
       user.value = user1;
-    }
+    };
+    const logOut = () => {
+      user.value = undefined;
+    };
 
-    return { user, saveuser };
+    return { user, saveuser, logOut };
   },
   {
     persist: true,

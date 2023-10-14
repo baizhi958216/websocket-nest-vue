@@ -39,7 +39,23 @@ const user = useUserStore();
 .messages {
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow: auto;
+}
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: #aeaeae;
+}
+
+.messages::-webkit-scrollbar-track {
+  border-radius: 10px;
 }
 .messages_container {
   display: flex;

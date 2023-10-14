@@ -3,29 +3,26 @@
     <div v-if="!user.user" class="createuser" @click="createUserVisible = true">
       Create User
     </div>
+    <div v-else>Current User: {{ user.user.username }}</div>
 
     <ChatBox />
 
     <CreateUser
       v-if="createUserVisible"
       :visable="createUserVisible"
-      @close="closeCreateUser"
+      @close="createUserVisible = false"
     />
   </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { useUserStore } from "./stores/userstore";
+import { useUserStore } from "./stores/user.store";
 import CreateUser from "./components/CreateUser.vue";
 import ChatBox from "./components/ChatBox.vue";
 
 const user = useUserStore();
 
 const createUserVisible = ref(false);
-
-const closeCreateUser = () => {
-  createUserVisible.value = false;
-};
 </script>
 <style scoped>
 .container {

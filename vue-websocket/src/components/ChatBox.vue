@@ -1,15 +1,12 @@
 <template>
   <div class="chat">
-    <div class="messages">
-      <div v-for="(message, index) in messageList" :key="index">
-        {{ message }}
-      </div>
-    </div>
+    <MessageList :messageList="messageStore.messageList" />
+
     <div class="editor">
       <textarea
         v-model="editor_input"
         type="text"
-        @keyup.enter="sendMessage"
+        @keydown.enter.prevent="sendMessage"
         class="editor_input"
       />
       <span class="editor_send" @click="sendMessage">Send</span>
@@ -18,34 +15,42 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import MessageList from "../components/MessageList.vue";
 import { ElMessage } from "element-plus";
-import { useUserStore } from "../stores/userstore";
+import { useUserStore } from "../stores/user.store";
+import { useMessageStore } from "../stores/message.store";
+import { client } from "../libs/socket.io";
 
-interface IMessage {
-  id?: string;
-  username: string;
-  message?: string;
-  createTime?: string;
-}
+onMounted(() => {
+  client.connect();
+});
 
-const user = useUserStore();
-
-const messageList = ref<IMessage[]>([]);
+const userStore = useUserStore();
+const messageStore = useMessageStore();
 
 const editor_input = ref<string>();
+
+client.on("connect", () => {
+  ElMessage.success("Socket connected.");
+});
+
+client.on("message", (message) => {
+  messageStore.messageList.push(message);
+});
+
 const sendMessage = () => {
   if (!editor_input.value) {
     ElMessage.error("Please input message.");
     return;
   }
-  if (!user.user) {
+  if (!userStore.user) {
     ElMessage.error("Please create user first.");
     localStorage.removeItem("user");
   } else {
-    messageList.value.push({
-      username: user.user.username,
-      message: editor_input.value,
+    client.emit("createMessage", {
+      userId: userStore.user.id,
+      content: editor_input.value,
     });
     editor_input.value = "";
   }
@@ -61,10 +66,6 @@ const sendMessage = () => {
   background: #eeeeee;
   border-radius: 5px;
   margin: 0 auto;
-}
-.messages {
-  width: 100%;
-  height: 100%;
 }
 .editor {
   display: flex;

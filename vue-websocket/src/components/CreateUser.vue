@@ -19,7 +19,7 @@
 </template>
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
-import { useUserStore } from "../stores/userstore";
+import { useUserStore } from "../stores/user.store";
 import { ref } from "vue";
 
 const props = defineProps({

@@ -7,7 +7,9 @@ export const useMessageStore = defineStore(
   () => {
     const messageList = ref<Partial<IMessage>[]>([]);
 
-    return { messageList };
+    const cleanLocalHistory = () => (messageList.value = []);
+
+    return { messageList, cleanLocalHistory };
   },
   {
     persist: true,

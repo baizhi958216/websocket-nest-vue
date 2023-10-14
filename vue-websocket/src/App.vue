@@ -1,9 +1,22 @@
 <template>
   <div class="container">
-    <div v-if="!user.user" class="createuser" @click="createUserVisible = true">
+    <div
+      v-if="!userStore.user"
+      class="createuser"
+      @click="createUserVisible = true"
+    >
       Create User
     </div>
-    <div v-else>Current User: {{ user.user.username }}</div>
+    <div v-else class="user">
+      <div>Current User: {{ userStore.user.username }}</div>
+      <el-button
+        type="danger"
+        plain
+        size="small"
+        @click="messageStore.cleanLocalHistory"
+        >Clean History</el-button
+      >
+    </div>
 
     <ChatBox />
 
@@ -17,10 +30,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useUserStore } from "./stores/user.store";
+import { useMessageStore } from "./stores/message.store";
 import CreateUser from "./components/CreateUser.vue";
 import ChatBox from "./components/ChatBox.vue";
 
-const user = useUserStore();
+const userStore = useUserStore();
+const messageStore = useMessageStore();
 
 const createUserVisible = ref(false);
 </script>
@@ -40,5 +55,12 @@ const createUserVisible = ref(false);
   user-select: none;
   cursor: pointer;
   width: fit-content;
+}
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  gap: 20px;
 }
 </style>

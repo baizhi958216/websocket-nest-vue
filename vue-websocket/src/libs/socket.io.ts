@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const client = io("http://192.168.0.102:3001", {
+const client = io(`${import.meta.env.VITE_SOCKET_PORT}`, {
   autoConnect: true,
 });
 

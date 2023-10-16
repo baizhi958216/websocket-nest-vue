@@ -38,7 +38,7 @@ const handleClose = () => {
 };
 
 const createUser = () => {
-  fetch(`http://192.168.0.102:3000/user`, {
+  fetch(`${import.meta.env.VITE_NEST_PORT}/user`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
